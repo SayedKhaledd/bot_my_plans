@@ -44,13 +44,26 @@ async def on_message(message):
     await message.channel.send(get_quote())
   options=encouraging
   if "encouragements" in db.keys():
-    options= options+ db["encouragements"]
+     options.extend(db["encouragements"])
   if any(word in  msg for word in sad_words):
     await message.channel.send(random.choice(options))
   if msg.startswith('$new'):
      encouraging_msg= msg.split("$new ",1)[1]
      update_encouragments(encouraging_msg)
      await message.channel.send("تمام يسطا")
+  if msg.startswith('$del'):
+     encouragments=[]
+     if "encouragements" in db.keys():
+      index= int(msg.split("$del",1)[1])
+      delete_msg(index)
+      encouragments=  db["encouragements"]
+     await message.channel.send("list is".join(encouragments) )
+  if msg.startswith('$وريني'):
+    my_list=[]
+    if "encouragements" in db.keys():
+      my_list=db["encouragements"]
+    await message.channel.send("list is".join(my_list) )
+
     
 
 my_secret = os.environ['TOKEN']
